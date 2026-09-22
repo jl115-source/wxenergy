@@ -4,7 +4,40 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
+import numpy as np
 import xarray as xr
+
+
+def cosine_latitude_weights(latitude: xr.DataArray) -> xr.DataArray:
+    """Return cosine-of-latitude area weights.
+
+    Parameters
+    ----------
+    latitude
+        One-dimensional latitude coordinate in degrees north.
+
+    Returns
+    -------
+    xarray.DataArray
+        Dimensionless weights with the same coordinate and dimension as ``latitude``.
+
+    Raises
+    ------
+    ValueError
+        If latitude is not one-dimensional or contains values outside [-90, 90].
+    """
+    if latitude.ndim != 1:
+        raise ValueError("latitude must be one-dimensional")
+    if bool(((latitude < -90) | (latitude > 90)).any()):
+        raise ValueError("latitude values must lie within [-90, 90] degrees")
+
+    weights = np.cos(np.deg2rad(latitude))
+    weights.name = "latitude_weight"
+    weights.attrs = {
+        "long_name": "cosine latitude area weight",
+        "units": "1",
+    }
+    return weights
 
 
 def weighted_mean(
