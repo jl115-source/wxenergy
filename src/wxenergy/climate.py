@@ -94,9 +94,7 @@ def anomaly(
             skipna=skipna,
         )
     elif groupby not in climatology_data.dims and groupby not in climatology_data.coords:
-        raise ValueError(
-            f"Provided climatology must contain the grouping coordinate {groupby!r}."
-        )
+        raise ValueError(f"Provided climatology must contain the grouping coordinate {groupby!r}.")
 
     result = data.groupby(key) - climatology_data
     result.attrs = data.attrs.copy()
