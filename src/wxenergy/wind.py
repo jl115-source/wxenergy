@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import numpy as np
 import xarray as xr
 
 
@@ -14,7 +13,7 @@ def wind_speed(u: xr.DataArray, v: xr.DataArray) -> xr.DataArray:
 
     Parameters
     ----------
-    u, v:
+    u, v
         Orthogonal wind components, typically zonal and meridional wind.
 
     Returns
@@ -32,7 +31,7 @@ def wind_speed(u: xr.DataArray, v: xr.DataArray) -> xr.DataArray:
     except ValueError as exc:
         raise ValueError("u and v coordinates must align exactly.") from exc
 
-    result = np.hypot(u_aligned, v_aligned)
+    result = (u_aligned**2 + v_aligned**2) ** 0.5
     result.name = "wind_speed"
     result.attrs = {"long_name": "wind speed"}
 
