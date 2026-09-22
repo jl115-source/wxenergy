@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import numpy as np
+import wxenergy as wx
 import xarray as xr
 from hypothesis import given, settings
 from hypothesis import strategies as st
-
-import wxenergy as wx
 
 
 FINITE_TEMPERATURE = st.floats(
