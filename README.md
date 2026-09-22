@@ -1,31 +1,54 @@
 # wxenergy
 
-**Weather and climate tools for energy analysis.**
+Weather and climate utilities for energy analysis.
 
-`wxenergy` is an open-source scientific Python project focused on the reusable processing layer between raw weather/climate data and downstream energy analysis.
+`wxenergy` is a small, xarray-native Python package for reusable weather and climate data processing.
 
-## Project direction
+## Install
 
-The initial public API will focus on:
+Development install from GitHub:
 
-- coordinate and metadata standardization
-- climatologies and anomalies
-- heating and cooling degree days
-- temporal aggregation
-- regional and weighted spatial aggregation
-- general wind and weather utilities
+```bash
+pip install git+https://github.com/jl115-source/wxenergy.git
+```
 
-The project is intentionally infrastructure-focused: no proprietary forecasting logic, trading signals, model-selection rules, or private datasets.
+For local development:
 
-## Website
+```bash
+git clone https://github.com/jl115-source/wxenergy.git
+cd wxenergy
+pip install -e ".[dev]"
+```
 
-The project site is designed to publish at:
+## Quickstart
 
-**https://jl115-source.github.io/wxenergy/**
+```python
+import xarray as xr
+import wxenergy as wx
+
+ds = xr.open_dataset("temperature.nc")
+
+climo = wx.climatology(ds.t2m)
+anom = wx.anomaly(ds.t2m)
+hdd = wx.hdd(ds.t2m, base=18)
+```
+
+## Initial API
+
+- `wx.climatology`
+- `wx.anomaly`
+- `wx.hdd`
+- `wx.cdd`
+- `wx.weighted_mean`
+- `wx.normalize_longitude`
+
+## Documentation
+
+https://jl115-source.github.io/wxenergy/
 
 ## Status
 
-Early development. The website and package skeleton are being established before the first Python release.
+Early development. The public API will stay deliberately small while the package structure, tests, and documentation mature.
 
 ## License
 
