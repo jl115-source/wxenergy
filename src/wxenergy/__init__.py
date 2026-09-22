@@ -2,7 +2,7 @@
 
 from .climate import anomaly, climatology
 from .energy import cdd, hdd
-from .spatial import weighted_mean
+from .spatial import cosine_latitude_weights, weighted_mean
 from .standardize import normalize_longitude
 from .temporal import daily_max, daily_mean, daily_min
 from .units import convert_temperature
@@ -13,6 +13,7 @@ __all__ = [
     "cdd",
     "climatology",
     "convert_temperature",
+    "cosine_latitude_weights",
     "daily_max",
     "daily_mean",
     "daily_min",
