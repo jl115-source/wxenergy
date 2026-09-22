@@ -1,47 +1,265 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="description" content="wxenergy — weather and climate tools for energy analysis."/>
-<title>wxenergy — weather & climate tools for energy analysis</title>
-<style>
-:root{--bg:#07111c;--bg2:#0b1724;--panel:rgba(15,29,44,.74);--line:rgba(255,255,255,.10);--text:#edf7ff;--muted:#9eb4c6;--soft:#c9d9e6;--a:#7dd3fc;--b:#86efac;--c:#c4b5fd;--max:1180px;--mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:var(--sans);background:radial-gradient(circle at 12% 0%,rgba(125,211,252,.13),transparent 28rem),radial-gradient(circle at 88% 18%,rgba(134,239,172,.09),transparent 30rem),linear-gradient(180deg,#06101a,#07111c 45%,#091521);min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,black,transparent 70%)}a{color:inherit;text-decoration:none}.wrap{width:min(calc(100% - 36px),var(--max));margin:auto}
-nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);background:rgba(7,17,28,.72);border-bottom:1px solid var(--line)}.nav{height:72px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:11px;align-items:center;font-weight:800;letter-spacing:-.02em}.mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(125,211,252,.16),rgba(134,239,172,.16));border:1px solid rgba(255,255,255,.16)}.mark:before{content:"∿";font-size:24px;color:var(--a);transform:translateY(-1px)}.links{display:flex;gap:23px;align-items:center;color:var(--muted);font-size:14px;font-weight:650}.links a:hover{color:var(--text)}.pill{padding:9px 13px;border:1px solid rgba(255,255,255,.18);border-radius:10px;color:var(--text)!important;background:rgba(255,255,255,.035)}
-.hero{padding:88px 0 68px}.grid{display:grid;grid-template-columns:1.03fr .97fr;gap:56px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#bce9ff;border:1px solid rgba(125,211,252,.2);background:rgba(125,211,252,.065);padding:8px 10px;border-radius:999px;margin-bottom:24px}.dot{width:7px;height:7px;border-radius:50%;background:var(--b);box-shadow:0 0 14px rgba(134,239,172,.8)}h1{font-size:clamp(52px,7.5vw,94px);line-height:.93;letter-spacing:-.065em;margin:0;font-weight:800}.grad{background:linear-gradient(95deg,#eff9ff 12%,#85dcff 52%,#9bf2bb 92%);-webkit-background-clip:text;background-clip:text;color:transparent}.lead{font-size:19px;line-height:1.65;color:var(--soft);max-width:660px;margin:27px 0 30px}.actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;gap:9px;padding:12px 16px;border-radius:11px;border:1px solid rgba(255,255,255,.18);font-weight:750;font-size:14px;transition:.18s}.btn:hover{transform:translateY(-1px)}.primary{color:#031018;background:linear-gradient(135deg,#8fe4ff,#9cf3bc);border-color:transparent}.secondary{background:rgba(255,255,255,.04)}.install{margin-top:24px;display:inline-flex;align-items:center;gap:12px;background:#08131e;border:1px solid var(--line);border-radius:11px;padding:10px 12px;color:#d7e8f4;font-family:var(--mono);font-size:13px}.prompt{color:var(--b)}.note{font-family:var(--sans);font-size:12px;color:var(--muted);border-left:1px solid var(--line);padding-left:11px}
-.term{border:1px solid rgba(255,255,255,.16);border-radius:22px;overflow:hidden;background:linear-gradient(180deg,rgba(16,34,53,.94),rgba(7,16,27,.94));box-shadow:0 28px 70px rgba(0,0,0,.34)}.termbar{padding:14px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}.lights{display:flex;gap:7px}.lights i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18)}pre{margin:0;padding:26px;overflow:auto;color:#dceaf3;font-family:var(--mono);font-size:13px;line-height:1.75}.kw{color:var(--c)}.fn{color:var(--a)}.str{color:#9ae6b4}.cm{color:#6f8799}.obj{color:#f4d58d}.minirow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.mini{padding:15px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}.mini strong{font-size:13px;display:block;margin-bottom:4px}.mini span{font-size:12px;color:var(--muted)}
-section{padding:66px 0}.head{display:flex;justify-content:space-between;gap:28px;align-items:end;margin-bottom:28px}.k{color:var(--a);font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}h2{font-size:clamp(30px,4vw,48px);letter-spacing:-.045em;line-height:1.05;margin:0}.head p{max-width:530px;color:var(--muted);line-height:1.65;margin:0}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{min-height:210px;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.044),rgba(255,255,255,.018))}.icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.035);margin-bottom:30px}.card h3{font-size:16px;margin:0 0 9px}.card p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}
-.flow{border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.024);padding:24px;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:16px}.flowbox{padding:19px;border:1px solid var(--line);border-radius:15px;background:rgba(9,22,35,.74)}.flowbox strong{display:block;font-size:14px;margin-bottom:7px}.flowbox span{font-size:12px;color:var(--muted)}.arrow{color:#688297;font-size:22px}
-.examples{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.ex,.small{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:rgba(255,255,255,.025)}.viz{height:255px;position:relative;overflow:hidden;background:radial-gradient(circle at 25% 35%,rgba(125,211,252,.45),transparent 16%),radial-gradient(circle at 67% 48%,rgba(134,239,172,.34),transparent 20%),radial-gradient(circle at 46% 82%,rgba(196,181,253,.32),transparent 17%),linear-gradient(145deg,#0b2132,#102537 58%,#0c1d2c)}.viz:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:34px 34px;transform:perspective(300px) rotateX(54deg) scale(1.35);transform-origin:center 70%;opacity:.34}.ring{position:absolute;border:1px solid rgba(255,255,255,.23);border-radius:50%;transform:rotate(-14deg)}.r1{width:240px;height:90px;left:42px;top:65px}.r2{width:350px;height:145px;left:6px;top:39px}.r3{width:230px;height:95px;right:15px;bottom:25px}.body{padding:22px}.body h3{font-size:18px;margin:0 0 7px}.body p{font-size:13px;line-height:1.55;color:var(--muted);margin:0}.stack{display:grid;gap:14px}.bars{height:108px;padding:18px;display:flex;align-items:end;gap:7px}.bar{flex:1;border-radius:6px 6px 2px 2px;background:linear-gradient(to top,rgba(125,211,252,.2),rgba(125,211,252,.76))}.bar:nth-child(even){background:linear-gradient(to top,rgba(134,239,172,.18),rgba(134,239,172,.67))}.line{height:108px;padding:18px}.line svg{width:100%;height:100%}
-.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.principle{padding:22px;border-top:1px solid rgba(255,255,255,.16)}.num{font-family:var(--mono);font-size:11px;color:var(--a);margin-bottom:26px}.principle h3{font-size:17px;margin:0 0 8px}.principle p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}.cta{margin:62px auto;border:1px solid rgba(255,255,255,.16);border-radius:28px;padding:44px;background:radial-gradient(circle at 90% 0%,rgba(134,239,172,.11),transparent 28rem),radial-gradient(circle at 10% 100%,rgba(125,211,252,.12),transparent 24rem),rgba(255,255,255,.028);display:flex;justify-content:space-between;gap:30px;align-items:center}.cta p{color:var(--muted);max-width:570px;line-height:1.65}footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);font-size:13px}.foot{display:flex;justify-content:space-between;gap:24px}.footlinks{display:flex;gap:20px}
-@media(max-width:900px){.grid,.examples{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}.principles{grid-template-columns:1fr}.head,.cta{align-items:flex-start;flex-direction:column}.links a:not(.pill){display:none}}@media(max-width:560px){.wrap{width:min(calc(100% - 24px),var(--max))}.hero{padding-top:58px}h1{font-size:54px}.cards,.minirow{grid-template-columns:1fr}.cta{padding:28px}.foot{flex-direction:column}}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="wxenergy — Python utilities for weather and climate data used in energy applications." />
+  <title>wxenergy</title>
+  <style>
+    :root {
+      --text: #202124;
+      --muted: #5f6368;
+      --line: #e5e7eb;
+      --soft: #f7f9fb;
+      --blue: #1769aa;
+      --blue-soft: #eef6fc;
+      --max: 920px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: #fff;
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: var(--mono); }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .nav {
+      width: min(calc(100% - 36px), var(--max));
+      margin: auto;
+      height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    main {
+      width: min(calc(100% - 36px), var(--max));
+      margin: auto;
+      padding: 64px 0 80px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 42px;
+      line-height: 1.1;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+    }
+    .subtitle {
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 19px;
+      max-width: 760px;
+    }
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border: 1px solid #cfe3f3;
+      border-radius: 5px;
+      background: var(--blue-soft);
+      color: #315f7e;
+      font-size: 13px;
+      margin-bottom: 34px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 20px 22px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--soft);
+      color: #252525;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    section { margin-top: 48px; }
+    h2 {
+      margin: 0 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+      font-size: 25px;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+    p { margin: 10px 0; }
+    ul { margin: 10px 0; padding-left: 22px; }
+    li { margin: 5px 0; }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .link-card {
+      display: block;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--text);
+      background: #fff;
+    }
+    .link-card:hover {
+      border-color: #b7cfe2;
+      background: #fbfdff;
+      text-decoration: none;
+    }
+    .link-card strong {
+      display: block;
+      color: var(--blue);
+      margin-bottom: 2px;
+      font-size: 15px;
+    }
+    .link-card span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .install {
+      margin-top: 14px;
+      display: inline-block;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--soft);
+      font-family: var(--mono);
+      font-size: 14px;
+    }
+    .note { color: var(--muted); font-size: 14px; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      padding: 22px 0 32px;
+    }
+    .footer-inner {
+      width: min(calc(100% - 36px), var(--max));
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    @media (max-width: 650px) {
+      main { padding-top: 42px; }
+      h1 { font-size: 36px; }
+      .nav-links a:not(:last-child) { display: none; }
+      .links-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-<nav><div class="wrap nav"><a class="brand" href="#"><span class="mark"></span><span>wxenergy</span></a><div class="links"><a href="#features">Features</a><a href="#examples">Examples</a><a href="#principles">Principles</a><a class="pill" href="https://github.com/jl115-source/wxenergy">GitHub ↗</a></div></div></nav>
-<header class="hero"><div class="wrap grid"><div><div class="eyebrow"><span class="dot"></span>Scientific Python for weather × energy</div><h1><span class="grad">Weather data,</span><br/>ready for analysis.</h1><p class="lead">A small, xarray-native toolkit for preparing weather and climate data for energy applications — standardization, climatologies, spatial aggregation, degree days, and clean reusable workflows.</p><div class="actions"><a class="btn primary" href="#features">Explore the toolkit →</a><a class="btn secondary" href="https://github.com/jl115-source/wxenergy">View on GitHub</a></div><div class="install"><span class="prompt">$</span> pip install wxenergy <span class="note">coming with v0.1</span></div></div><div><div class="term"><div class="termbar"><div class="lights"><i></i><i></i><i></i></div><span>quickstart.py</span></div><pre><span class="kw">import</span> xarray <span class="kw">as</span> xr
-<span class="kw">import</span> wxenergy <span class="kw">as</span> wx
+<header>
+  <div class="nav">
+    <a class="brand" href="#">wxenergy</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="#getting-started">Getting started</a>
+      <a href="#features">Features</a>
+      <a href="https://github.com/jl115-source/wxenergy">GitHub</a>
+    </nav>
+  </div>
+</header>
 
-ds = xr.<span class="fn">open_dataset</span>(<span class="str">"temperature.nc"</span>)
-ds = wx.<span class="fn">standardize</span>(ds)
+<main>
+  <h1>wxenergy</h1>
+  <p class="subtitle">Python utilities for working with weather and climate data in energy applications.</p>
+  <div class="status">Early development</div>
 
-<span class="cm"># Daily climate anomalies</span>
-anom = wx.<span class="fn">anomaly</span>(
-    ds.<span class="obj">t2m</span>, climatology=<span class="str">"dayofyear"</span>
-)
+  <pre><code>import xarray as xr
+import wxenergy as wx
 
-<span class="cm"># Energy-weather metric</span>
-hdd = wx.<span class="fn">hdd</span>(ds.<span class="obj">t2m</span>, base=<span class="obj">18</span>)
+ds = xr.open_dataset("temperature.nc")
+ds = wx.standardize(ds)
 
-<span class="cm"># Regional aggregate</span>
-regional = wx.<span class="fn">weighted_mean</span>(
-    ds.<span class="obj">t2m</span>, weights=population
-)</pre></div><div class="minirow"><div class="mini"><strong>xarray-native</strong><span>Coordinates in, coordinates out.</span></div><div class="mini"><strong>Composable</strong><span>Small, predictable functions.</span></div><div class="mini"><strong>Transparent</strong><span>Infrastructure, not black boxes.</span></div></div></div></div></header>
-<section id="features"><div class="wrap"><div class="head"><div><div class="k">Core toolkit</div><h2>Useful plumbing.<br/>No black box.</h2></div><p>wxenergy focuses on the repetitive processing layer between raw weather/climate data and downstream analysis. It deliberately avoids proprietary forecasting logic or trading signals.</p></div><div class="cards"><div class="card"><div class="icon">⌁</div><h3>Standardize</h3><p>Coordinate names, longitude conventions, units, time dimensions, metadata, and common variable conventions.</p></div><div class="card"><div class="icon">∿</div><h3>Climate statistics</h3><p>Climatologies, anomalies, percentiles, rolling statistics, and temporal resampling.</p></div><div class="card"><div class="icon">◫</div><h3>Spatial processing</h3><p>Region masks, area means, weighted means, nearest-gridpoint matching, and regional workflows.</p></div><div class="card"><div class="icon">⚡</div><h3>Energy weather</h3><p>Heating and cooling degree days, degree hours, wind utilities, and general energy-weather metrics.</p></div></div></div></section>
-<section><div class="wrap"><div class="head"><div><div class="k">Design</div><h2>Built between<br/>data and models.</h2></div><p>Use the tools you already trust for storage, analysis, verification, and modelling. wxenergy handles the glue.</p></div><div class="flow"><div class="flowbox"><strong>Weather & climate data</strong><span>NetCDF · GRIB · Zarr · reanalysis · forecasts</span></div><div class="arrow">→</div><div class="flowbox"><strong>wxenergy</strong><span>clean · transform · aggregate · derive</span></div><div class="arrow">→</div><div class="flowbox"><strong>Your analysis</strong><span>statistics · ML · visualization · energy models</span></div></div></div></section>
-<section id="examples"><div class="wrap"><div class="head"><div><div class="k">Example gallery</div><h2>See the workflow,<br/>not just the API.</h2></div><p>Examples will be executable, visual, and short enough to understand in a few minutes.</p></div><div class="examples"><article class="ex"><div class="viz"><div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div></div><div class="body"><h3>Temperature anomalies</h3><p>Build a day-of-year climatology, calculate anomalies, preserve metadata, and visualize the result.</p></div></article><div class="stack"><article class="small"><div class="bars"><div class="bar" style="height:28%"></div><div class="bar" style="height:42%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:82%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:35%"></div></div><div class="body"><h3>Degree days</h3><p>Convert temperature into clean HDD/CDD time series.</p></div></article><article class="small"><div class="line"><svg viewBox="0 0 400 100" preserveAspectRatio="none"><polyline fill="none" stroke="#7dd3fc" stroke-width="3" points="0,74 50,60 100,68 150,36 200,48 250,28 300,40 350,19 400,29"/><polyline fill="none" stroke="#86efac" stroke-width="3" opacity=".75" points="0,84 50,79 100,61 150,66 200,42 250,52 300,31 350,36 400,18"/></svg></div><div class="body"><h3>Regional aggregation</h3><p>Aggregate gridded weather with generic user-supplied weights.</p></div></article></div></div></div></section>
-<section id="principles"><div class="wrap"><div class="head"><div><div class="k">Project principles</div><h2>Small, transparent,<br/>boringly reliable.</h2></div></div><div class="principles"><div class="principle"><div class="num">01 / NATIVE</div><h3>Stay close to xarray</h3><p>No custom data container. Standard DataArray and Dataset objects remain at the center of the workflow.</p></div><div class="principle"><div class="num">02 / PREDICTABLE</div><h3>Preserve scientific context</h3><p>Coordinates, useful metadata, missing values, units, and dimensions are first-class concerns.</p></div><div class="principle"><div class="num">03 / GENERAL</div><h3>Infrastructure, not alpha</h3><p>Reusable processing utilities — not model-selection logic, market signals, or proprietary thresholds.</p></div></div></div></section>
-<section><div class="wrap cta"><div><div class="k">Early development</div><h2>Build the boring layer once.</h2><p>The first release will focus on a deliberately small, well-tested API for common weather and climate processing tasks used across energy analysis.</p></div><div class="actions"><a class="btn primary" href="https://github.com/jl115-source/wxenergy">Follow on GitHub →</a></div></div></section>
-<footer><div class="wrap foot"><div><strong style="color:var(--text)">wxenergy</strong> · open-source weather & climate utilities for energy analysis</div><div class="footlinks"><a href="https://github.com/jl115-source/wxenergy">GitHub</a><a href="https://github.com/jl115-source/wxenergy/blob/main/LICENSE">MIT License</a></div></div></footer>
-</body></html>
+anom = wx.anomaly(ds.t2m, climatology="dayofyear")
+hdd = wx.hdd(ds.t2m, base=18)
+regional = wx.weighted_mean(ds.t2m, weights=population)</code></pre>
+
+  <div class="links-grid">
+    <a class="link-card" href="#getting-started">
+      <strong>Getting started</strong>
+      <span>Installation and a short example.</span>
+    </a>
+    <a class="link-card" href="#features">
+      <strong>Features</strong>
+      <span>What the package is intended to cover.</span>
+    </a>
+    <a class="link-card" href="https://github.com/jl115-source/wxenergy">
+      <strong>Source code</strong>
+      <span>Browse the project on GitHub.</span>
+    </a>
+    <a class="link-card" href="https://github.com/jl115-source/wxenergy/issues">
+      <strong>Issues</strong>
+      <span>Report bugs or suggest improvements.</span>
+    </a>
+  </div>
+
+  <section id="getting-started">
+    <h2>Getting started</h2>
+    <p>wxenergy is not yet published on PyPI. The first release will be installable with:</p>
+    <div class="install">pip install wxenergy</div>
+    <p class="note">For now, follow development and source code on GitHub.</p>
+  </section>
+
+  <section id="features">
+    <h2>Features</h2>
+    <ul>
+      <li>Standardize common xarray coordinates, units and time conventions.</li>
+      <li>Calculate climatologies, anomalies, percentiles and rolling statistics.</li>
+      <li>Compute basic energy-weather quantities such as HDD, CDD and degree hours.</li>
+      <li>Perform spatial and weighted aggregation on gridded weather data.</li>
+      <li>Preserve xarray coordinates and metadata wherever practical.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Scope</h2>
+    <p>
+      The package is intended to handle common, reusable weather-data processing tasks. It is not a forecasting system,
+      power-market model, or trading library.
+    </p>
+  </section>
+
+  <section>
+    <h2>Project</h2>
+    <p>
+      wxenergy is open source under the MIT License. The API is still being designed, so names and behavior may change before v0.1.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span>wxenergy</span>
+    <span><a href="https://github.com/jl115-source/wxenergy">GitHub</a> · MIT License</span>
+  </div>
+</footer>
+</body>
+</html>
