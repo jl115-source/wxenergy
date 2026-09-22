@@ -1,5 +1,7 @@
 """Weather and climate utilities for energy analysis."""
 
+from importlib.metadata import version
+
 from .climate import anomaly, climatology
 from .energy import cdd, hdd
 from .spatial import cosine_latitude_weights, weighted_mean
@@ -23,4 +25,4 @@ __all__ = [
     "wind_speed",
 ]
 
-__version__ = "0.2.0.dev0"
+__version__ = version("wxenergy")
