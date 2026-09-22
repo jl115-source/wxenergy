@@ -86,14 +86,13 @@ def weighted_mean(
         raise ValueError("Weight coordinates must align exactly with data.") from exc
 
     if dim is None:
-        reduce_dims: Hashable | list[Hashable] = list(aligned_weights.dims)
+        reduce_dims: list[Hashable] = list(aligned_weights.dims)
     elif isinstance(dim, Iterable) and not isinstance(dim, (str, bytes)):
         reduce_dims = list(dim)
     else:
-        reduce_dims = dim
+        reduce_dims = [dim]
 
-    requested_dims = set(reduce_dims) if isinstance(reduce_dims, list) else {reduce_dims}
-    unknown_reduce_dims = requested_dims - set(data.dims)
+    unknown_reduce_dims = set(reduce_dims) - set(data.dims)
     if unknown_reduce_dims:
         dims = ", ".join(sorted(map(str, unknown_reduce_dims)))
         raise ValueError(f"Reduction dimensions are not present in data: {dims}")
