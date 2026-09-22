@@ -39,8 +39,10 @@ jobs:
       - name: Type check
         run: mypy src/wxenergy
 
-      - name: Run example
-        run: python examples/basic_workflow.py
+      - name: Run examples
+        run: |
+          python examples/basic_workflow.py
+          python examples/ensemble_workflow.py
 
   test:
     name: Test Python ${{ matrix.python-version }}
