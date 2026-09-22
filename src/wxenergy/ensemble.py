@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from typing import Literal
 
 import xarray as xr
+
+Comparison = Literal["gt", "ge", "lt", "le"]
 
 
 def _validate_member_dim(data: xr.DataArray, member_dim: str) -> None:
@@ -18,22 +21,7 @@ def ensemble_mean(
     member_dim: str = "member",
     skipna: bool | None = None,
 ) -> xr.DataArray:
-    """Calculate the ensemble mean.
-
-    Parameters
-    ----------
-    data
-        Ensemble data containing ``member_dim``.
-    member_dim
-        Name of the ensemble-member dimension.
-    skipna
-        Whether missing values should be skipped. ``None`` uses xarray's default.
-
-    Returns
-    -------
-    xarray.DataArray
-        Mean across ensemble members with remaining coordinates preserved.
-    """
+    """Calculate the ensemble mean."""
     _validate_member_dim(data, member_dim)
     result = data.mean(member_dim, skipna=skipna, keep_attrs=True)
     if data.name:
@@ -48,19 +36,7 @@ def ensemble_spread(
     ddof: int = 0,
     skipna: bool | None = None,
 ) -> xr.DataArray:
-    """Calculate ensemble standard deviation.
-
-    Parameters
-    ----------
-    data
-        Ensemble data containing ``member_dim``.
-    member_dim
-        Name of the ensemble-member dimension.
-    ddof
-        Delta degrees of freedom passed to :meth:`xarray.DataArray.std`.
-    skipna
-        Whether missing values should be skipped. ``None`` uses xarray's default.
-    """
+    """Calculate ensemble standard deviation."""
     _validate_member_dim(data, member_dim)
     if ddof < 0:
         raise ValueError("ddof must be non-negative")
@@ -92,4 +68,53 @@ def ensemble_quantile(
     result = data.quantile(q_arg, dim=member_dim, skipna=skipna, keep_attrs=True)
     if data.name:
         result.name = f"{data.name}_ensemble_quantile"
+    return result
+
+
+def ensemble_probability(
+    data: xr.DataArray,
+    threshold: float,
+    *,
+    comparison: Comparison = "ge",
+    member_dim: str = "member",
+) -> xr.DataArray:
+    """Calculate the fraction of ensemble members meeting a threshold condition.
+
+    Parameters
+    ----------
+    data
+        Ensemble data containing ``member_dim``.
+    threshold
+        Threshold expressed in the same units as ``data``.
+    comparison
+        One of ``"gt"``, ``"ge"``, ``"lt"``, or ``"le"``.
+    member_dim
+        Name of the ensemble-member dimension.
+
+    Returns
+    -------
+    xarray.DataArray
+        Probability in the closed interval ``[0, 1]``.
+    """
+    _validate_member_dim(data, member_dim)
+    operators = {
+        "gt": data > threshold,
+        "ge": data >= threshold,
+        "lt": data < threshold,
+        "le": data <= threshold,
+    }
+    try:
+        condition = operators[comparison]
+    except KeyError as exc:
+        raise ValueError("comparison must be one of 'gt', 'ge', 'lt', or 'le'") from exc
+
+    result = condition.mean(member_dim)
+    result.attrs = {
+        "long_name": "ensemble threshold probability",
+        "threshold": threshold,
+        "comparison": comparison,
+        "units": "1",
+    }
+    if data.name:
+        result.name = f"{data.name}_ensemble_probability"
     return result
