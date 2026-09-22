@@ -7,7 +7,6 @@ import xarray as xr
 
 import wxenergy as wx
 
-
 time = xr.date_range("2024-07-01", periods=8, freq="6h")
 latitude = [35.0, 45.0, 55.0]
 longitude = [0.0, 90.0, 180.0, 270.0]
