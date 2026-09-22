@@ -17,6 +17,14 @@ Energy
    :undoc-members:
    :show-inheritance:
 
+Ensemble
+--------
+
+.. automodule:: wxenergy.ensemble
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Spatial
 -------
 
