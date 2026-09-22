@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import math
+from typing import Literal
 
 import xarray as xr
+
+DegreeHourMode = Literal["heating", "cooling"]
 
 
 def _validate_base(base: float) -> None:
@@ -33,13 +36,6 @@ def hdd(data: xr.DataArray, *, base: float = 18.0) -> xr.DataArray:
 
     The calculation is ``max(base - temperature, 0)``. Missing input values remain
     missing in the result. ``base`` must use the same temperature units as ``data``.
-
-    Parameters
-    ----------
-    data
-        Temperature data.
-    base
-        Base temperature in the same units as ``data``.
     """
     _validate_base(base)
     result = (base - data).clip(min=0)
@@ -51,6 +47,22 @@ def cdd(data: xr.DataArray, *, base: float = 18.0) -> xr.DataArray:
 
     The calculation is ``max(temperature - base, 0)``. Missing input values remain
     missing in the result. ``base`` must use the same temperature units as ``data``.
+    """
+    _validate_base(base)
+    result = (data - base).clip(min=0)
+    return _finish_degree_day_result(result, data, metric="cooling", base=base)
+
+
+def degree_hours(
+    data: xr.DataArray,
+    *,
+    base: float = 18.0,
+    mode: DegreeHourMode = "heating",
+) -> xr.DataArray:
+    """Calculate pointwise heating or cooling degree-hour values.
+
+    This function returns the instantaneous departure from ``base`` appropriate for
+    regularly sampled hourly data. It does not integrate or infer sampling intervals.
 
     Parameters
     ----------
@@ -58,7 +70,23 @@ def cdd(data: xr.DataArray, *, base: float = 18.0) -> xr.DataArray:
         Temperature data.
     base
         Base temperature in the same units as ``data``.
+    mode
+        ``"heating"`` computes ``max(base - temperature, 0)``; ``"cooling"`` computes
+        ``max(temperature - base, 0)``.
     """
     _validate_base(base)
-    result = (data - base).clip(min=0)
-    return _finish_degree_day_result(result, data, metric="cooling", base=base)
+    if mode == "heating":
+        result = (base - data).clip(min=0)
+        suffix = "hdh"
+    elif mode == "cooling":
+        result = (data - base).clip(min=0)
+        suffix = "cdh"
+    else:
+        raise ValueError("mode must be 'heating' or 'cooling'")
+
+    result.attrs = data.attrs.copy()
+    result.attrs["long_name"] = f"{mode} degree hours"
+    result.attrs["base_temperature"] = base
+    if data.name:
+        result.name = f"{data.name}_{suffix}"
+    return result
