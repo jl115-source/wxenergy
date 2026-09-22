@@ -8,8 +8,6 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 import wxenergy as wx
-
-
 FINITE_TEMPERATURE = st.floats(
     min_value=-100.0,
     max_value=100.0,
