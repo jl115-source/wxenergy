@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wxenergy"
+version = "0.1.0.dev0"
+description = "Weather and climate utilities for energy analysis"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Joseph Lockwood" }]
+keywords = ["weather", "climate", "energy", "xarray", "meteorology"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+]
+dependencies = [
+  "numpy>=1.24",
+  "xarray>=2023.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+]
+
+[project.urls]
+Documentation = "https://jl115-source.github.io/wxenergy/"
+Source = "https://github.com/jl115-source/wxenergy"
+Issues = "https://github.com/jl115-source/wxenergy/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wxenergy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
