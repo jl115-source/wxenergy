@@ -65,6 +65,36 @@ def test_weighted_mean_rejects_unknown_reduction_dimension():
         wx.weighted_mean(data, weights, dim="y")
 
 
+def test_weighted_mean_rejects_misaligned_shared_coordinates():
+    data = xr.DataArray(
+        [10.0, 20.0],
+        dims="latitude",
+        coords={"latitude": [40.0, 50.0]},
+    )
+    weights = xr.DataArray(
+        [1.0, 2.0],
+        dims="latitude",
+        coords={"latitude": [40.0, 55.0]},
+    )
+
+    with pytest.raises(ValueError, match="align exactly"):
+        wx.weighted_mean(data, weights)
+
+
+def test_cosine_latitude_weights_reject_out_of_range_values():
+    latitude = xr.DataArray([0.0, 91.0], dims="latitude")
+
+    with pytest.raises(ValueError, match="within"):
+        wx.cosine_latitude_weights(latitude)
+
+
+def test_cosine_latitude_weights_reject_multidimensional_input():
+    latitude = xr.DataArray([[10.0, 20.0]], dims=("y", "x"))
+
+    with pytest.raises(ValueError, match="one-dimensional"):
+        wx.cosine_latitude_weights(latitude)
+
+
 def test_normalize_longitude_requires_coordinate():
     data = xr.DataArray([1.0, 2.0], dims="x")
 
