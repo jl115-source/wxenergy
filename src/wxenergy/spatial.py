@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Hashable, Iterable
 
 import numpy as np
 import xarray as xr
@@ -31,7 +31,8 @@ def cosine_latitude_weights(latitude: xr.DataArray) -> xr.DataArray:
     if bool(((latitude < -90) | (latitude > 90)).any()):
         raise ValueError("latitude values must lie within [-90, 90] degrees")
 
-    weights = np.cos(np.deg2rad(latitude))
+    values = np.cos(np.deg2rad(np.asarray(latitude.values)))
+    weights = latitude.copy(data=values)
     weights.name = "latitude_weight"
     weights.attrs = {
         "long_name": "cosine latitude area weight",
@@ -44,7 +45,7 @@ def weighted_mean(
     data: xr.DataArray,
     weights: xr.DataArray,
     *,
-    dim: str | Iterable[str] | None = None,
+    dim: Hashable | Iterable[Hashable] | None = None,
     skipna: bool | None = None,
 ) -> xr.DataArray:
     """Calculate a weighted mean with exact labeled-coordinate alignment.
@@ -76,7 +77,7 @@ def weighted_mean(
     """
     unknown_weight_dims = set(weights.dims) - set(data.dims)
     if unknown_weight_dims:
-        dims = ", ".join(sorted(unknown_weight_dims))
+        dims = ", ".join(sorted(map(str, unknown_weight_dims)))
         raise ValueError(f"Weight dimensions are not present in data: {dims}")
 
     try:
@@ -85,16 +86,16 @@ def weighted_mean(
         raise ValueError("Weight coordinates must align exactly with data.") from exc
 
     if dim is None:
-        reduce_dims: str | list[str] = list(aligned_weights.dims)
-    elif isinstance(dim, str):
-        reduce_dims = dim
-    else:
+        reduce_dims: Hashable | list[Hashable] = list(aligned_weights.dims)
+    elif isinstance(dim, Iterable) and not isinstance(dim, (str, bytes)):
         reduce_dims = list(dim)
+    else:
+        reduce_dims = dim
 
-    requested_dims = {reduce_dims} if isinstance(reduce_dims, str) else set(reduce_dims)
+    requested_dims = set(reduce_dims) if isinstance(reduce_dims, list) else {reduce_dims}
     unknown_reduce_dims = requested_dims - set(data.dims)
     if unknown_reduce_dims:
-        dims = ", ".join(sorted(unknown_reduce_dims))
+        dims = ", ".join(sorted(map(str, unknown_reduce_dims)))
         raise ValueError(f"Reduction dimensions are not present in data: {dims}")
 
     result = data.weighted(aligned_weights).mean(
