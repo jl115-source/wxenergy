@@ -1,0 +1,34 @@
+:root {
+  --pst-color-primary: #7aa2c7;
+  --pst-color-link: #8bb7db;
+  --pst-color-inline-code: #d3d8de;
+}
+
+html[data-theme="dark"] {
+  --pst-color-background: #111417;
+  --pst-color-on-background: #171b20;
+  --pst-color-surface: #1b2026;
+  --pst-color-text-base: #d6d9dc;
+  --pst-color-text-muted: #9da6af;
+  --pst-color-border: #30363d;
+}
+
+.bd-main .bd-content .bd-article-container {
+  max-width: 52rem;
+}
+
+.bd-header {
+  box-shadow: none;
+  border-bottom: 1px solid var(--pst-color-border);
+}
+
+pre,
+.highlight {
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.015em;
+}

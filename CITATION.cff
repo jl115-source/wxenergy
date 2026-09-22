@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use wxenergy in research or published analysis, please cite the software."
+title: wxenergy
+type: software
+authors:
+  - family-names: Lockwood
+    given-names: Joseph
+repository-code: "https://github.com/jl115-source/wxenergy"
+url: "https://jl115-source.github.io/wxenergy/"
+license: MIT
+version: 0.2.0.dev0
+keywords:
+  - weather
+  - climate
+  - energy
+  - meteorology
+  - xarray

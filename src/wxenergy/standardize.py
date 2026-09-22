@@ -9,6 +9,41 @@ import xarray as xr
 LongitudeTarget = Literal["-180_180", "0_360"]
 
 
+def standardize(
+    data: xr.Dataset | xr.DataArray,
+    *,
+    longitude_target: LongitudeTarget | None = None,
+) -> xr.Dataset | xr.DataArray:
+    """Standardize common latitude and longitude coordinate names.
+
+    The function intentionally performs only conservative, unambiguous renaming:
+    ``lat`` becomes ``latitude`` and ``lon`` becomes ``longitude``. Existing canonical
+    names are left unchanged. If both an alias and its canonical name are present, a
+    ``ValueError`` is raised rather than guessing which coordinate should win.
+
+    Parameters
+    ----------
+    data
+        Input xarray object.
+    longitude_target
+        Optional longitude convention. If supplied, longitude is normalized after
+        coordinate renaming.
+    """
+    rename: dict[str, str] = {}
+    for alias, canonical in (("lat", "latitude"), ("lon", "longitude")):
+        if alias in data.coords or alias in data.dims:
+            if canonical in data.coords or canonical in data.dims:
+                raise ValueError(
+                    f"Cannot rename {alias!r} to {canonical!r}: both names are present."
+                )
+            rename[alias] = canonical
+
+    result = data.rename(rename) if rename else data.copy(deep=False)
+    if longitude_target is not None:
+        result = normalize_longitude(result, target=longitude_target)
+    return result
+
+
 def normalize_longitude(
     data: xr.Dataset | xr.DataArray,
     *,
@@ -30,13 +65,6 @@ def normalize_longitude(
     -------
     xarray.Dataset or xarray.DataArray
         A new object with normalized, ascending longitudes.
-
-    Raises
-    ------
-    KeyError
-        If ``lon_name`` is not a coordinate.
-    ValueError
-        If the longitude coordinate is not one-dimensional or ``target`` is invalid.
     """
     if lon_name not in data.coords:
         raise KeyError(f"Longitude coordinate {lon_name!r} was not found.")

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wxenergy"
-version = "0.1.0.dev0"
+version = "0.2.0.dev0"
 description = "Weather and climate utilities for energy analysis"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -19,7 +19,10 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Scientific/Engineering :: Atmospheric Science",
+  "Typing :: Typed",
 ]
 dependencies = [
   "numpy>=1.24",
@@ -29,18 +32,26 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "build>=1.2",
+  "dask[array]>=2023.1",
+  "hypothesis>=6.100",
+  "mypy>=1.11",
+  "pre-commit>=3.7",
   "pytest>=8",
+  "pytest-cov>=5",
   "ruff>=0.6",
+  "scipy>=1.10",
+  "twine>=5",
 ]
 docs = [
-  "sphinx>=8",
-  "pydata-sphinx-theme>=0.21",
+  "sphinx>=7.2",
+  "pydata-sphinx-theme>=0.15",
 ]
 
 [project.urls]
 Documentation = "https://jl115-source.github.io/wxenergy/"
 Source = "https://github.com/jl115-source/wxenergy"
 Issues = "https://github.com/jl115-source/wxenergy/issues"
+Changelog = "https://github.com/jl115-source/wxenergy/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/wxenergy"]
@@ -49,14 +60,41 @@ packages = ["src/wxenergy"]
 include = [
   "/src",
   "/tests",
+  "/docs",
+  "/examples",
   "/README.md",
+  "/CHANGELOG.md",
+  "/CONTRIBUTING.md",
+  "/CITATION.cff",
   "/LICENSE",
   "/pyproject.toml",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+xfail_strict = true
+
+[tool.coverage.run]
+branch = true
+source = ["wxenergy"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
 
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/wxenergy"]
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_return_any = true
+disallow_untyped_defs = true
+no_implicit_optional = true
