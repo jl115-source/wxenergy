@@ -47,15 +47,15 @@ def weighted_mean(
     dim: str | Iterable[str] | None = None,
     skipna: bool | None = None,
 ) -> xr.DataArray:
-    """Calculate a weighted mean using xarray's labeled alignment.
+    """Calculate a weighted mean with exact labeled-coordinate alignment.
 
     Parameters
     ----------
     data
         Data to aggregate.
     weights
-        Weights whose dimensions must be a subset of ``data`` dimensions. Missing
-        weights are rejected by xarray.
+        Weights whose dimensions must be a subset of ``data`` dimensions. Coordinates
+        on shared dimensions must match exactly.
     dim
         Dimension or dimensions to reduce. If omitted, all dimensions present in
         ``weights`` are reduced.
@@ -67,14 +67,25 @@ def weighted_mean(
     -------
     xarray.DataArray
         Weighted mean with unreduced dimensions preserved.
+
+    Raises
+    ------
+    ValueError
+        If weight dimensions are not present in ``data``, shared coordinates do not
+        align exactly, or a requested reduction dimension is absent.
     """
     unknown_weight_dims = set(weights.dims) - set(data.dims)
     if unknown_weight_dims:
         dims = ", ".join(sorted(unknown_weight_dims))
         raise ValueError(f"Weight dimensions are not present in data: {dims}")
 
+    try:
+        _, aligned_weights = xr.align(data, weights, join="exact", copy=False)
+    except ValueError as exc:
+        raise ValueError("Weight coordinates must align exactly with data.") from exc
+
     if dim is None:
-        reduce_dims: str | list[str] = list(weights.dims)
+        reduce_dims: str | list[str] = list(aligned_weights.dims)
     elif isinstance(dim, str):
         reduce_dims = dim
     else:
@@ -86,7 +97,7 @@ def weighted_mean(
         dims = ", ".join(sorted(unknown_reduce_dims))
         raise ValueError(f"Reduction dimensions are not present in data: {dims}")
 
-    result = data.weighted(weights).mean(
+    result = data.weighted(aligned_weights).mean(
         dim=reduce_dims,
         skipna=skipna,
         keep_attrs=True,
