@@ -34,7 +34,7 @@ def wind_speed(u: xr.DataArray, v: xr.DataArray) -> xr.DataArray:
 
     result = np.hypot(u_aligned, v_aligned)
     result.name = "wind_speed"
-    result.attrs["long_name"] = "wind speed"
+    result.attrs = {"long_name": "wind speed"}
 
     u_units = u.attrs.get("units")
     v_units = v.attrs.get("units")
