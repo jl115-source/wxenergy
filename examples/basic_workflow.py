@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 import numpy as np
-import xarray as xr
-
 import wxenergy as wx
+import xarray as xr
 
 
 time = xr.date_range("2024-07-01", periods=8, freq="6h")
