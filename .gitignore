@@ -2,12 +2,15 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
+.hypothesis/
 .ruff_cache/
 .mypy_cache/
 .venv/
 venv/
 dist/
 build/
+docs/_build/
 .coverage
+coverage.xml
 htmlcov/
 .DS_Store
