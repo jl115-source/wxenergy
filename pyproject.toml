@@ -72,7 +72,8 @@ include = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "--strict-markers --strict-config"
+addopts = "-ra --strict-markers --strict-config"
+xfail_strict = true
 
 [tool.coverage.run]
 branch = true
