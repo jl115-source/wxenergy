@@ -4,6 +4,7 @@ from importlib.metadata import version
 
 from .climate import anomaly, climatology
 from .energy import cdd, hdd
+from .ensemble import ensemble_mean, ensemble_quantile, ensemble_spread
 from .spatial import cosine_latitude_weights, weighted_mean
 from .standardize import normalize_longitude
 from .temporal import daily_max, daily_mean, daily_min
@@ -19,6 +20,9 @@ __all__ = [
     "daily_max",
     "daily_mean",
     "daily_min",
+    "ensemble_mean",
+    "ensemble_quantile",
+    "ensemble_spread",
     "hdd",
     "normalize_longitude",
     "weighted_mean",
